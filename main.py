@@ -24,12 +24,12 @@ def main():
     AsteroidField.containers = (updatable)
     Asteroid.containers = (asteroids, updatable,drawable)
     Player.containers = (updatable, drawable)
-    Shot.containers = (updatable, drawable)
+    Shot.containers = (shots,updatable, drawable)
 
     #AsteroidField
     AF = AsteroidField()
     #Player
-    my_player = Player(SCREEN_WIDTH/2,SCREEN_HEIGHT /2)
+    player1 = Player(SCREEN_WIDTH/2,SCREEN_HEIGHT /2)
     #game loop
     game_on = True
     while game_on == True:
@@ -45,10 +45,15 @@ def main():
         #draw needs to be between fill and flip
         updatable.update(dt)
         for asteroid in asteroids:
-            if asteroid.collides_with(my_player) == True:
+            if asteroid.collides_with(player1) == True:
                 log_event("player_hit")
                 print ("Game over!")
                 return sys.exit()
+            for shot in shots:
+                if asteroid.collides_with(shot):
+                    log_event("asteroid_shot")
+                    asteroid.split()
+                    shot.kill()
         for drawn in drawable:
             drawn.draw(screen)
         pygame.display.flip()
